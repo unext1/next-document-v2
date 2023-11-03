@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.ql-container.ql-snow {
+  border: none !important;
+}
+
+.ql-editor.ql-blank:focus-visible {
+  outline: none !important;
+}
+
+.ql-editor:focus-visible {
+  outline: none !important;
+}
+
+.ql-editor {
+  min-height: 200px;
+}
+
+.ql-toolbar.ql-snow {
+  border: none !important;
+}
