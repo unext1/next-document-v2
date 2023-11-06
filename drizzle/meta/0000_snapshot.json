@@ -1,65 +1,51 @@
 {
-  "id": "00000000-0000-0000-0000-000000000000",
-  "prevId": "",
   "version": "5",
   "dialect": "mysql",
+  "id": "5d5ba82c-98c2-49c6-b27d-0d848eb7bbcd",
+  "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
-    "documents": {
-      "name": "documents",
+    "users": {
+      "name": "users",
       "columns": {
         "id": {
-          "autoincrement": true,
           "name": "id",
           "type": "int",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "autoincrement": true
         },
-        "author": {
-          "autoincrement": false,
-          "name": "author",
+        "username": {
+          "name": "username",
           "type": "varchar(255)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "autoincrement": false
         },
-        "title": {
-          "autoincrement": false,
-          "name": "title",
+        "password": {
+          "name": "password",
           "type": "varchar(255)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "autoincrement": false
         },
-        "content": {
-          "autoincrement": false,
-          "name": "content",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "createdAt": {
-          "autoincrement": false,
-          "name": "createdAt",
+        "created_at": {
+          "name": "created_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": false
-        },
-        "deleted": {
-          "autoincrement": false,
-          "name": "deleted",
-          "type": "tinyint",
-          "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "autoincrement": false
         }
       },
+      "indexes": {},
+      "foreignKeys": {},
       "compositePrimaryKeys": {
-        "documents_id": {
-          "name": "documents_id",
+        "users_id": {
+          "name": "users_id",
           "columns": [
             "id"
           ]
         }
       },
-      "indexes": {},
-      "foreignKeys": {},
       "uniqueConstraints": {}
     }
   },
