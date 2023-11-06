@@ -10,7 +10,8 @@
     "introspect": "drizzle-kit introspect:mysql",
     "generate": "drizzle-kit generate:mysql --config=drizzle.config.ts",
     "migrate": "tsx -r dotenv/config drizzle.migrate.ts",
-    "push": "drizzle-kit push:mysql"
+    "push": "drizzle-kit push:mysql",
+    "studio": "drizzle-kit studio"
   },
   "dependencies": {
     "@mantine/core": "^7.1.7",
