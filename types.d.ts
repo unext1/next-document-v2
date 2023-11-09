@@ -6,4 +6,5 @@ type DocType = {
   created_at: Date;
   is_public: number;
   deleted: number;
+  updated_at: Date;
 };

@@ -8,12 +8,12 @@ import { eq } from "drizzle-orm";
 export default async function EditDoc({
   id,
   content,
-  author,
+  user_id,
   title,
 }: {
   id: number;
   content: string;
-  author: string;
+  user_id: string;
   title: string;
 }) {
   const con = connect(config);
@@ -21,7 +21,11 @@ export default async function EditDoc({
 
   const edit = await db
     .update(documents)
-    .set({ title: title, content: content, user_id: 0 })
+    .set({
+      title: title,
+      content: content,
+      user_id: 0,
+    })
     .where(eq(documents.id, id));
 
   return edit;

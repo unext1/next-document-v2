@@ -12,10 +12,10 @@ export default async function RemoveDoc({ id }: { id: number }) {
   const doc = await db.select().from(documents).where(eq(documents.id, id));
 
   if (doc[0].deleted === 1) {
-    // Soft Delete
+    // Hard Delete
     return await db.delete(documents).where(eq(documents.id, id));
   } else {
-    // Hard Delete
+    // Soft Delete
     await db.update(documents).set({ deleted: 1 }).where(eq(documents.id, id));
   }
 

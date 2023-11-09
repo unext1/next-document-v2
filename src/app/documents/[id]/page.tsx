@@ -55,8 +55,9 @@ const DocumentPage = () => {
           <h1 className="font-bold mb-4">Id: {documentId}</h1>
           <div className="mt-4 uppercase text-xs text-gray-400">Title:</div>
           <p> {singleDoc.title}</p>
+
           <div className="mt-4 uppercase text-xs text-gray-400">Author:</div>
-          <p>{singleDoc.author}</p>
+          <p>{singleDoc.user_id}</p>
           <div className="mt-4 uppercase text-xs text-gray-400">Content:</div>
           <div
             className="text-sm mt-1 prose-sm"

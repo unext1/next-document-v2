@@ -17,7 +17,6 @@ export default async function PostDocs({
   const db = drizzle(con);
 
   const now = new Date();
-
   // Try fixing formatting for happy db schema
   const formattedDate = `${now.getFullYear()}-${
     now.getMonth() + 1
