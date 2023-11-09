@@ -69,7 +69,7 @@ export default function AllDocs() {
                 </div>
               </div>
               <div className="text-xs text-gray-400">
-                {new Date(i.createdAt).toDateString()}
+                {new Date(i.created_at).toDateString()}
               </div>
 
               <div className="mb-3 font-semibold capitalize">
@@ -77,7 +77,7 @@ export default function AllDocs() {
                   href={`/documents/${i.id}`}
                   className="text-sm text-gray-400 capitalize"
                 >
-                  {i.author}
+                  {i.user_id}
                 </Link>
               </div>
               <div className="w-full mb-3 bg-slate-700 h-0.5 rounded-full" />

@@ -21,7 +21,7 @@ export default async function EditDoc({
 
   const edit = await db
     .update(documents)
-    .set({ title: title, content: content, author: author })
+    .set({ title: title, content: content, user_id: 0 })
     .where(eq(documents.id, id));
 
   return edit;

@@ -54,11 +54,10 @@ export default function NewDocumentPage() {
       setError("");
       console.log("Document added successfully!");
     } else {
+      console.log(response);
       console.error("Error adding the document");
     }
   };
-
-  console.log(error);
 
   return (
     <div>

@@ -13,7 +13,7 @@ export default async function GetAllDocs() {
   const docs = await db
     .select()
     .from(documents)
-    .orderBy(desc(documents.createdAt));
+    .orderBy(desc(documents.created_at));
 
   return docs;
 }

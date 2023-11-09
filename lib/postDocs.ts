@@ -24,11 +24,12 @@ export default async function PostDocs({
   }-${now.getDate()} ${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
 
   const docs = await db.insert(documents).values({
-    author: author || "",
-    content: content || "",
+    user_id: 0,
     title: title || "",
-    createdAt: formattedDate || "",
-    deleted: false || null,
+    content: content || "",
+    created_at: formattedDate || "",
+    is_public: 0,
+    deleted: 0,
   });
 
   return docs;

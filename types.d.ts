@@ -2,7 +2,8 @@ type DocType = {
   id: number;
   title: string;
   content: string;
-  author: string;
-  createdAt: Date;
+  user_id: number;
+  created_at: Date;
+  is_public: number;
   deleted: number;
 };
