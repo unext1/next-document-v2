@@ -1,11 +1,11 @@
 "use client";
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 export default function AllDocs() {
   const [docs, setDocs] = useState<DocType[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     setIsLoading(true);
@@ -18,7 +18,9 @@ export default function AllDocs() {
         const allDocs = await res.json();
 
         const filteredDocs = allDocs.filter(
-          (doc: DocType) => doc.deleted !== 1
+          (doc: DocType) =>
+            doc.deleted !== 1 &&
+            doc.title.toLowerCase().includes(searchTerm.toLowerCase())
         );
 
         setDocs(filteredDocs);
@@ -29,7 +31,7 @@ export default function AllDocs() {
       }
     };
     getAllDocuments();
-  }, []);
+  }, [searchTerm]);
 
   const handleDelete = async ({ id }: { id: number }) => {
     const response = await fetch(`/api/${id}`, {
@@ -41,12 +43,17 @@ export default function AllDocs() {
     }
   };
 
-  if (isLoading) {
-    return <div>Loading Data...</div>;
-  }
+
 
   return (
     <>
+      <input
+        type="text"
+        placeholder="Search..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        className="border border-gray-300 p-2 mb-4 text-black"
+      />
       <h2 className="uppercase font-semibold tracking-wider">
         {docs.length >= 1 ? "All Documents" : "No documents Found"}
       </h2>
