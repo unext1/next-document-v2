@@ -17,13 +17,11 @@ export default function AllDocs() {
         }
         const allDocs = await res.json();
 
-        const filteredDocs = allDocs.filter(
-          (doc: DocType) =>
-            doc.deleted !== 1 &&
-            doc.title.toLowerCase().includes(searchTerm.toLowerCase())
-        );
+        const sortedDocs = allDocs
+          .filter((doc: DocType) => doc.deleted !== 1 && doc.title.toLowerCase().includes(searchTerm.toLowerCase()))
+          .sort((a, b) => (b.updated_at || b.created_at).localeCompare(a.updated_at || a.created_at));
 
-        setDocs(filteredDocs);
+        setDocs(sortedDocs);
         setIsLoading(false);
       } catch (error) {
         console.error(error);
@@ -42,8 +40,6 @@ export default function AllDocs() {
       setDocs((prevDocs) => prevDocs.filter((doc) => doc.id !== id));
     }
   };
-
-
 
   return (
     <>
@@ -76,9 +72,8 @@ export default function AllDocs() {
                 </div>
               </div>
               <div className="text-xs text-gray-400">
-                {new Date(i.created_at).toDateString()}
+                {new Date(i.updated_at || i.created_at).toLocaleString()}
               </div>
-
               <div className="mb-3 font-semibold capitalize">
                 <Link
                   href={`/documents/${i.id}`}

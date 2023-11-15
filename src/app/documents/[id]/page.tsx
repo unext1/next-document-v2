@@ -55,6 +55,12 @@ const DocumentPage = () => {
           <h1 className="font-bold mb-4">Id: {documentId}</h1>
           <div className="mt-4 uppercase text-xs text-gray-400">Title:</div>
           <p> {singleDoc.title}</p>
+          <div className="mt-4 uppercase text-xs text-gray-400">Updated:</div>
+          <p>
+      {singleDoc.updated_at
+        ? new Date(singleDoc.updated_at).toLocaleString()
+        : new Date(singleDoc.created_at).toLocaleString()}
+    </p>
           <div className="mt-4 uppercase text-xs text-gray-400">Author:</div>
           <p>{singleDoc.author}</p>
           <div className="mt-4 uppercase text-xs text-gray-400">Content:</div>
