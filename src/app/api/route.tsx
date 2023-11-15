@@ -5,6 +5,7 @@ import PostDocs from "@/lib/postDocs";
 export async function GET(req: Request, res: Response) {
   try {
     const documents = await GetAllDocs();
+    console.log(documents, "in API");
     return NextResponse.json(documents, { status: 200 });
   } catch (error) {
     return NextResponse.json({ error: "An error occurred" }, { status: 500 });
