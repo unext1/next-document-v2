@@ -1,3 +1,17 @@
+import "next-auth";
+
+declare module "next-auth" {
+  interface Session {
+    user: {
+      id: string;
+      email: string;
+      name: string;
+      image: string;
+      role: string;
+    } & DefaultSession["user"];
+  }
+}
+
 type DocType = {
   id: number;
   title: string;
@@ -8,15 +22,3 @@ type DocType = {
   deleted: number;
   updated_at: Date;
 };
-import "next-auth";
-
-declare module "next-auth" {
-  interface Session {
-    user: {
-      id: number;
-      name: string;
-      email: string;
-      role: string;
-    };
-  }
-}

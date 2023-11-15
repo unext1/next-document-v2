@@ -1,8 +1,9 @@
+"use client";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { FormEvent } from "react";
 
-export default async function LoginForm() {
+export default function LoginForm() {
   const router = useRouter();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {

@@ -14,10 +14,10 @@ export async function GET(req: Request, res: Response) {
 export async function POST(req: Request, res: Response) {
   try {
     const body = await req.json();
-    const { title, author, content } = body;
+    const { title, userId, content } = body;
     const documents = await PostDocs({
       title,
-      author,
+      userId,
       content,
     });
     return NextResponse.json(documents, { status: 200 });

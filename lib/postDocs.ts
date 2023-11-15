@@ -5,13 +5,13 @@ import { drizzle } from "drizzle-orm/planetscale-serverless";
 import { documents } from "../db/schema";
 
 export default async function PostDocs({
-  author,
   content,
   title,
+  userId,
 }: {
-  author: string;
   content: string;
   title: string;
+  userId: string;
 }) {
   const con = connect(config);
   const db = drizzle(con);
@@ -23,7 +23,7 @@ export default async function PostDocs({
   }-${now.getDate()} ${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
 
   const docs = await db.insert(documents).values({
-    user_id: 0,
+    user_id: Number(userId),
     title: title || "",
     content: content || "",
     created_at: formattedDate || "",

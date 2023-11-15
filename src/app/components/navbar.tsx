@@ -1,9 +1,11 @@
 "use client";
 import { Disclosure } from "@headlessui/react";
 import { MenuIcon, XIcon } from "lucide-react";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 
 export default function Navbar() {
+  const { data: session } = useSession();
   return (
     <Disclosure as="header" className="shadow fixed w-full py-2 z-50">
       {({ open }) => (
@@ -36,12 +38,21 @@ export default function Navbar() {
               >
                 Add Document
               </Link>
-              <Link
-                href="/login"
-                className="inline-flex items-center px-1 pt-1 text-sm"
-              >
-                Login
-              </Link>
+              {!session ? (
+                <Link
+                  href="/login"
+                  className="inline-flex items-center px-1 pt-1 text-sm"
+                >
+                  Login
+                </Link>
+              ) : (
+                <Link
+                  href="/profile"
+                  className="inline-flex items-center px-1 pt-1 text-sm"
+                >
+                  Profile
+                </Link>
+              )}
             </div>
 
             <div className="flex  items-center sm:hidden">
@@ -73,11 +84,19 @@ export default function Navbar() {
                   Add Document
                 </Disclosure.Button>
               </Link>
-              <Link href="/login" className="w-full">
-                <Disclosure.Button className="block w-full py-1 pl-3 pr-4 text-base text-left font-medium ">
-                  Login
-                </Disclosure.Button>
-              </Link>
+              {!session ? (
+                <Link href="/login" className="w-full">
+                  <Disclosure.Button className="block w-full py-1 pl-3 pr-4 text-base text-left font-medium ">
+                    Login
+                  </Disclosure.Button>
+                </Link>
+              ) : (
+                <Link href="/profile" className="w-full">
+                  <Disclosure.Button className="block w-full py-1 pl-3 pr-4 text-base text-left font-medium ">
+                    Profile
+                  </Disclosure.Button>
+                </Link>
+              )}
             </div>
           </Disclosure.Panel>
         </div>

@@ -1,16 +1,17 @@
 "use client";
 import React, { useState, ChangeEvent, FormEvent, useMemo } from "react";
 import dynamic from "next/dynamic";
+import { useSession } from "next-auth/react";
 
 export interface FormData {
-  author: string;
   title: string;
 }
 
 export default function NewDocumentPage() {
+  const { data: session } = useSession();
+
   const [content, setContent] = useState("");
   const [formData, setFormData] = useState<FormData>({
-    author: "",
     title: "",
   });
   const [error, setError] = useState("");
@@ -32,14 +33,14 @@ export default function NewDocumentPage() {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
-    if (!formData.title || !formData.author || !content) {
+    if (!formData.title || !content) {
       setError("Please fill in all required fields.");
       return;
     }
 
     const response = await fetch("/api", {
       method: "POST",
-      body: JSON.stringify({ ...formData, content }),
+      body: JSON.stringify({ ...formData, content, userId: session?.user.id }),
       headers: {
         "Content-Type": "application/json",
       },
@@ -47,7 +48,6 @@ export default function NewDocumentPage() {
 
     if (response.ok) {
       setFormData({
-        author: "",
         title: "",
       });
       setContent("");
@@ -85,24 +85,7 @@ export default function NewDocumentPage() {
             aria-label="Title"
           />
         </div>
-        <label
-          htmlFor="author"
-          className="block text-xs mb-1 mt-6 uppercase font-semibold leading-6 text-gray-400"
-        >
-          Author
-        </label>
-        <div className="mt-2">
-          <input
-            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:outline-none px-4 focus:ring-blue-400 sm:text-sm sm:leading-6"
-            type="text"
-            id="author"
-            name="author"
-            value={formData.author}
-            onChange={handleInputChange}
-            required
-            aria-label="Author"
-          />
-        </div>
+
         <label
           htmlFor="content"
           className="block text-xs mb-1 mt-6 uppercase font-semibold leading-6 text-gray-400"

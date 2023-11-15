@@ -5,6 +5,7 @@ import Navbar from "@/src/app/components/navbar";
 
 import "react-quill/dist/quill.snow.css";
 import Footer from "./components/footer";
+import AuthProvider from "./components/auth/authprovider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,15 +21,17 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body
-        className={`${inter.className} flex flex-col min-h-screen bg-slate-950 text-white `}
-      >
-        <Navbar />
-        <main className="flex-1 container mt-28 mx-auto px-3 md:px-6">
-          {children}
-        </main>
-        <Footer />
-      </body>
+      <AuthProvider>
+        <body
+          className={`${inter.className} flex flex-col min-h-screen bg-slate-950 text-white `}
+        >
+          <Navbar />
+          <main className="flex-1 container mt-28 mx-auto px-3 md:px-6">
+            {children}
+          </main>
+          <Footer />
+        </body>
+      </AuthProvider>
     </html>
   );
 }
