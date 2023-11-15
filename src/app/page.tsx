@@ -1,9 +1,11 @@
-"use client";
-
+import { getServerSession } from "next-auth";
+import { getSession, signOut } from "next-auth/react";
 import Link from "next/link";
 import React, { useState, ChangeEvent, FormEvent } from "react";
 
-export default function Home() {
+export default async function Home() {
+  const session = await getServerSession();
+  console.log(session);
   return (
     <>
       <div className="mx-auto flex flex-col items-center py-32 ">

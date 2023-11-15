@@ -36,6 +36,12 @@ export default function Navbar() {
               >
                 Add Document
               </Link>
+              <Link
+                href="/login"
+                className="inline-flex items-center px-1 pt-1 text-sm"
+              >
+                Login
+              </Link>
             </div>
 
             <div className="flex  items-center sm:hidden">
@@ -65,6 +71,11 @@ export default function Navbar() {
               <Link href="/documents/new" className="w-full">
                 <Disclosure.Button className="block w-full py-1 pl-3 pr-4 text-base text-left font-medium ">
                   Add Document
+                </Disclosure.Button>
+              </Link>
+              <Link href="/login" className="w-full">
+                <Disclosure.Button className="block w-full py-1 pl-3 pr-4 text-base text-left font-medium ">
+                  Login
                 </Disclosure.Button>
               </Link>
             </div>

@@ -29,6 +29,7 @@ export default async function PostDocs({
     created_at: formattedDate || "",
     is_public: 0,
     deleted: 0,
+    category_id: 0,
   });
 
   return docs;

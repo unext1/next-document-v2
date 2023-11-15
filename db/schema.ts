@@ -10,8 +10,10 @@ import {
 
 export const users = mysqlTable("users", {
   id: int("id").autoincrement().notNull().primaryKey(),
+  email: varchar("email", { length: 255 }).notNull(),
   username: varchar("username", { length: 255 }),
-  password: varchar("password", { length: 255 }),
+  password: varchar("password", { length: 255 }).notNull(),
+  role: text("role").default("user"),
   created_at: timestamp("created_at", { mode: "string" }),
 });
 
@@ -24,6 +26,7 @@ export const documents = mysqlTable("documents", {
   is_public: tinyint("is_public").notNull().default(0),
   deleted: tinyint("deleted").notNull().default(0),
   user_id: int("user_id").notNull(),
+  category_id: int("category_id").notNull(),
 });
 
 export const usersRelations = relations(users, ({ many }) => ({

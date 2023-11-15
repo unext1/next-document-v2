@@ -28,10 +28,12 @@
     "@tiptap/pm": "^2.1.12",
     "@tiptap/react": "^2.1.12",
     "@tiptap/starter-kit": "^2.1.12",
+    "bcrypt": "^5.1.1",
     "drizzle-orm": "^0.28.6",
     "lucide-react": "^0.289.0",
     "mysql2": "^3.6.2",
     "next": "13.5.6",
+    "next-auth": "^4.24.5",
     "react": "^18",
     "react-dom": "^18",
     "react-quill": "^2.0.0"
@@ -39,6 +41,7 @@
   "devDependencies": {
     "@headlessui/react": "^1.7.17",
     "@tailwindcss/typography": "^0.5.10",
+    "@types/bcrypt": "^5.0.2",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
