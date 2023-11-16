@@ -207,7 +207,7 @@ const EditDocumentPage = () => {
         </div>
 
         <div className="mt-4">
-          <label className="block text-sm font-medium text-gray-700">
+          <label className="block text-sm font-medium text-gray-400">
             <input
               type="checkbox"
               className="mr-2"
@@ -215,7 +215,7 @@ const EditDocumentPage = () => {
               checked={formData.isPublic}
               onChange={handleCheckboxChange}
             />
-            Public Document
+            Make Document Public
           </label>
         </div>
 

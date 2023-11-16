@@ -2,6 +2,7 @@
 import React, { useState, ChangeEvent, FormEvent, useMemo } from "react";
 import dynamic from "next/dynamic";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export interface FormData {
   title: string;
@@ -10,6 +11,8 @@ export interface FormData {
 
 export default function NewDocumentPage() {
   const { data: session } = useSession();
+
+  const router = useRouter();
 
   const [content, setContent] = useState("");
   const [formData, setFormData] = useState<FormData>({
@@ -67,7 +70,7 @@ export default function NewDocumentPage() {
       });
       setContent("");
       setError("");
-      console.log("Document added successfully!");
+      router.push(`/documents`);
     } else {
       console.log(response);
       console.error("Error adding the document");

@@ -1,9 +1,8 @@
 "use client";
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
 import { DocType } from "@/types";
 import { useSession } from "next-auth/react";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 
 export default function AllDocs() {
   const [docs, setDocs] = useState<DocType[]>([]);
@@ -40,9 +39,17 @@ export default function AllDocs() {
     });
 
     if (response.ok) {
-      setDocs((prevDocs) =>
-        prevDocs.map((doc) => (doc.id === id ? { ...doc, deleted: true } : doc))
-      );
+      setDocs((prevDocs) => {
+        const isDeleted = prevDocs.some((doc) => doc.id === id && doc.deleted);
+
+        if (isDeleted) {
+          return prevDocs.filter((doc) => doc.id !== id);
+        } else {
+          return prevDocs.map((doc) =>
+            doc.id === id ? { ...doc, deleted: true } : doc
+          );
+        }
+      });
     }
   };
 

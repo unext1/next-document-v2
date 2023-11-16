@@ -29,13 +29,22 @@ export const documents = mysqlTable("documents", {
   category_id: int("category_id").notNull(),
 });
 
+export const categories = mysqlTable("categories", {
+  id: int("id").autoincrement().notNull().primaryKey(),
+  name: varchar("name", { length: 255 }).notNull(),
+});
+
 export const usersRelations = relations(users, ({ many }) => ({
   documents: many(documents),
 }));
 
-export const blocksRelations = relations(documents, ({ one }) => ({
+export const documentsRelations = relations(documents, ({ one }) => ({
   user: one(users, {
     fields: [documents.user_id],
     references: [users.id],
+  }),
+  categories: one(categories, {
+    fields: [documents.category_id],
+    references: [categories.id],
   }),
 }));
