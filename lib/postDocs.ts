@@ -9,11 +9,13 @@ export default async function PostDocs({
   title,
   userId,
   isPublic,
+  categoryId,
 }: {
   content: string;
   title: string;
   userId: string;
   isPublic: boolean;
+  categoryId: number;
 }) {
   const con = connect(config);
   const db = drizzle(con);
@@ -31,7 +33,7 @@ export default async function PostDocs({
     created_at: formattedDate || "",
     is_public: isPublic ? 1 : 0,
     deleted: 0,
-    category_id: 0,
+    category_id: categoryId,
   });
 
   return docs;
