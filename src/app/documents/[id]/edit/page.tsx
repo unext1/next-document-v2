@@ -1,4 +1,5 @@
 "use client";
+
 import { useSession } from "next-auth/react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
@@ -14,6 +15,7 @@ import React, {
 export interface FormData {
   userId: string;
   title: string;
+  isPublic: boolean;
 }
 
 const EditDocumentPage = () => {
@@ -25,6 +27,7 @@ const EditDocumentPage = () => {
   const [formData, setFormData] = useState<FormData>({
     userId: "",
     title: "",
+    isPublic: false,
   });
 
   const [isLoading, setIsLoading] = useState(true);
@@ -41,6 +44,7 @@ const EditDocumentPage = () => {
         setFormData({
           userId: document.user_id,
           title: document.title,
+          isPublic: document.is_public || false,
         });
         setContent(document.content);
       } catch (error) {
@@ -68,6 +72,14 @@ const EditDocumentPage = () => {
     }));
   };
 
+  const handleCheckboxChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, checked } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: checked,
+    }));
+  };
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
@@ -78,6 +90,8 @@ const EditDocumentPage = () => {
     setIsEditing(true);
 
     try {
+      console.log(formData.isPublic);
+
       const response = await fetch(`/api/${documentId}`, {
         method: "PATCH",
         body: JSON.stringify({ ...formData, content }),
@@ -118,9 +132,10 @@ const EditDocumentPage = () => {
     return <p>Loading Data...</p>;
   }
 
-  if (String(session?.user.id) != formData.userId) {
+  if (String(session?.user.id) !== String(formData.userId)) {
     return <p>You are not authorized to Edit this document</p>;
   }
+
   return (
     <div>
       <div className="flex justify-between w-full  mb-4">
@@ -190,6 +205,20 @@ const EditDocumentPage = () => {
             onChange={setContent}
           />
         </div>
+
+        <div className="mt-4">
+          <label className="block text-sm font-medium text-gray-700">
+            <input
+              type="checkbox"
+              className="mr-2"
+              name="isPublic"
+              checked={formData.isPublic}
+              onChange={handleCheckboxChange}
+            />
+            Public Document
+          </label>
+        </div>
+
         <button
           type="submit"
           className="relative mt-8 py-2 px-6 w-fit bg-blue-400 text-sm uppercase font-semibold rounded-xl"

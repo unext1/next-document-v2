@@ -3,7 +3,7 @@ import { connect } from "@planetscale/database";
 import { config } from "../db/config";
 import { drizzle } from "drizzle-orm/planetscale-serverless";
 import { documents } from "../db/schema";
-import { and, eq } from "drizzle-orm";
+import { or, eq } from "drizzle-orm";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/src/app/api/auth/[...nextauth]/route";
 
@@ -19,7 +19,7 @@ export default async function RemoveDoc({ id }: { id: number }) {
     return await db
       .delete(documents)
       .where(
-        and(eq(documents.id, id), eq(documents.id, Number(session?.user.id)))
+        or(eq(documents.id, id), eq(documents.id, Number(session?.user.id)))
       );
   } else {
     // Soft Delete
@@ -27,7 +27,7 @@ export default async function RemoveDoc({ id }: { id: number }) {
       .update(documents)
       .set({ deleted: 1 })
       .where(
-        and(eq(documents.id, id), eq(documents.id, Number(session?.user.id)))
+        or(eq(documents.id, id), eq(documents.id, Number(session?.user.id)))
       );
   }
 

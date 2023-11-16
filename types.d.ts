@@ -19,7 +19,7 @@ type DocType = {
   user_id: number;
   created_at: Date;
   is_public: number;
-  deleted: number;
+  deleted: boolean | number;
   updated_at: Date;
   user: {
     id: number;

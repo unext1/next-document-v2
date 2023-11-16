@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react";
 
 export interface FormData {
   title: string;
+  isPublic: boolean;
 }
 
 export default function NewDocumentPage() {
@@ -13,6 +14,7 @@ export default function NewDocumentPage() {
   const [content, setContent] = useState("");
   const [formData, setFormData] = useState<FormData>({
     title: "",
+    isPublic: false,
   });
   const [error, setError] = useState("");
   const ReactQuill = useMemo(
@@ -30,6 +32,14 @@ export default function NewDocumentPage() {
     }));
   };
 
+  const handleCheckboxChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, checked } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: checked,
+    }));
+  };
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
@@ -40,7 +50,11 @@ export default function NewDocumentPage() {
 
     const response = await fetch("/api", {
       method: "POST",
-      body: JSON.stringify({ ...formData, content, userId: session?.user.id }),
+      body: JSON.stringify({
+        ...formData,
+        content,
+        userId: session?.user.id,
+      }),
       headers: {
         "Content-Type": "application/json",
       },
@@ -49,6 +63,7 @@ export default function NewDocumentPage() {
     if (response.ok) {
       setFormData({
         title: "",
+        isPublic: false,
       });
       setContent("");
       setError("");
@@ -58,6 +73,9 @@ export default function NewDocumentPage() {
       console.error("Error adding the document");
     }
   };
+  if (!session?.user) {
+    return <p>You are not authorized to create documents</p>;
+  }
 
   return (
     <div>
@@ -117,6 +135,20 @@ export default function NewDocumentPage() {
             onChange={setContent}
           />
         </div>
+
+        <div className="mt-4">
+          <label className="block text-sm font-medium text-gray-400">
+            <input
+              type="checkbox"
+              className="mr-2"
+              name="isPublic"
+              checked={formData.isPublic}
+              onChange={handleCheckboxChange}
+            />
+            Make Document Public
+          </label>
+        </div>
+
         <button
           type="submit"
           className="relative mt-8 py-2 px-6 w-fit bg-blue-400 text-sm uppercase font-semibold rounded-xl"

@@ -20,11 +20,11 @@ export default function AllDocs() {
         }
         const allDocs = await res.json();
 
-        const filteredDocs = allDocs.filter(
-          (doc: DocType) => doc.deleted !== 1
-        );
+        // const filteredDocs = allDocs.filter(
+        //   (doc: DocType) => doc.deleted !== 1
+        // );
 
-        setDocs(filteredDocs);
+        setDocs(allDocs);
         setIsLoading(false);
       } catch (error) {
         console.error(error);
@@ -40,7 +40,9 @@ export default function AllDocs() {
     });
 
     if (response.ok) {
-      setDocs((prevDocs) => prevDocs.filter((doc) => doc.id !== id));
+      setDocs((prevDocs) =>
+        prevDocs.map((doc) => (doc.id === id ? { ...doc, deleted: true } : doc))
+      );
     }
   };
 
@@ -56,8 +58,46 @@ export default function AllDocs() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {docs.map((i) => (
           <div key={i.id}>
-            <div className="hover:scale-105  transition-all bg-slate-900 p-6 rounded-xl content-container overflow-hidden ">
-              <div className="flex justify-between">
+            <div className="hover:scale-105 transition-all bg-slate-900 p-6 rounded-xl content-container overflow-hidden ">
+              <div className="flex space-x-4">
+                {i.is_public ? (
+                  <span className="inline-flex items-center gap-x-1.5 rounded-md px-2 py-1 text-xs font-medium text-white ring-1 ring-inset ring-gray-200">
+                    <svg
+                      className="h-1.5 w-1.5 fill-green-400"
+                      viewBox="0 0 6 6"
+                      aria-hidden="true"
+                    >
+                      <circle cx={3} cy={3} r={3} />
+                    </svg>
+                    Public
+                  </span>
+                ) : (
+                  <span className="inline-flex items-center gap-x-1.5 rounded-md px-2 py-1 text-xs font-medium text-white ring-1 ring-inset ring-gray-200">
+                    <svg
+                      className="h-1.5 w-1.5 fill-red-400"
+                      viewBox="0 0 6 6"
+                      aria-hidden="true"
+                    >
+                      <circle cx={3} cy={3} r={3} />
+                    </svg>
+                    Private
+                  </span>
+                )}
+                {i.deleted ? (
+                  <span className="inline-flex items-center gap-x-1.5 rounded-md px-2 py-1 text-xs font-medium text-white ring-1 ring-inset ring-gray-200">
+                    <svg
+                      className="h-1.5 w-1.5 fill-red-400"
+                      viewBox="0 0 6 6"
+                      aria-hidden="true"
+                    >
+                      <circle cx={3} cy={3} r={3} />
+                    </svg>
+                    Deleted
+                  </span>
+                ) : null}
+              </div>
+
+              <div className="flex mt-4 justify-between">
                 <Link
                   href={`/documents/${i.id}`}
                   className="text-xl font-bold capitalize"
