@@ -82,11 +82,9 @@ const EditDocumentPage = () => {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-
     if (isEditing) {
       return;
     }
-
     setIsEditing(true);
 
     try {

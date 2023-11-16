@@ -6,7 +6,7 @@ import * as schema from "../db/schema";
 import { documents } from "../db/schema";
 
 import { authOptions } from "@/src/app/api/auth/[...nextauth]/route";
-import { eq, or } from "drizzle-orm";
+import { eq, or, and } from "drizzle-orm";
 import { getServerSession } from "next-auth";
 
 export default async function GetAllDocs() {
@@ -26,9 +26,17 @@ export default async function GetAllDocs() {
         },
       },
     },
-    where: or(
-      eq(documents.user_id, Number(session?.user.id)),
-      eq(documents.is_public, 1)
+    where: and(
+      or(
+        and(
+          eq(documents.user_id, Number(session?.user.id)),
+          eq(documents.deleted, 0) // Allow access for the document owner if not deleted
+        ),
+        and(
+          eq(documents.is_public, 1),
+          eq(documents.deleted, 0) // Allow access for public documents if not deleted
+        )
+      )
     ),
   });
 
