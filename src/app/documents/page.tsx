@@ -7,10 +7,11 @@ import { useEffect, useState } from "react";
 export default function AllDocs() {
   const [docs, setDocs] = useState<DocType[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
+
   const { data: session } = useSession();
 
   useEffect(() => {
-    setIsLoading(true);
     const getAllDocuments = async () => {
       try {
         const res = await fetch("/api");
@@ -19,11 +20,21 @@ export default function AllDocs() {
         }
         const allDocs = await res.json();
 
-        // const filteredDocs = allDocs.filter(
-        //   (doc: DocType) => doc.deleted !== 1
-        // );
+        const sortedDocs = allDocs
+          .filter(
+            (doc: DocType) =>
+              doc.deleted !== 1 &&
+              doc.title.toLowerCase().includes(searchTerm.toLowerCase())
+          )
+          .sort((a: any, b: any) =>
+            (b.updated_at || b.created_at).localeCompare(
+              a.updated_at || a.created_at
+            )
+          );
 
-        setDocs(allDocs);
+        setDocs(sortedDocs);
+
+        // setDocs(allDocs);
         setIsLoading(false);
       } catch (error) {
         console.error(error);
@@ -31,7 +42,7 @@ export default function AllDocs() {
       }
     };
     getAllDocuments();
-  }, []);
+  }, [searchTerm]);
 
   const handleDelete = async ({ id }: { id: number }) => {
     const response = await fetch(`/api/${id}`, {
@@ -59,6 +70,13 @@ export default function AllDocs() {
 
   return (
     <>
+      <input
+        type="text"
+        placeholder="Search..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        className="border border-gray-300 p-2 mb-4 text-black"
+      />
       <h2 className="uppercase font-semibold tracking-wider">
         {docs.length >= 1 ? "All Documents" : "No documents Found"}
       </h2>
