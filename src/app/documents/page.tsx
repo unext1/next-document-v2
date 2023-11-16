@@ -21,10 +21,8 @@ export default function AllDocs() {
         const allDocs = await res.json();
 
         const sortedDocs = allDocs
-          .filter(
-            (doc: DocType) =>
-              doc.deleted !== 1 &&
-              doc.title.toLowerCase().includes(searchTerm.toLowerCase())
+          .filter((doc: DocType) =>
+            doc.title.toLowerCase().includes(searchTerm.toLowerCase())
           )
           .sort((a: any, b: any) =>
             (b.updated_at || b.created_at).localeCompare(
@@ -70,16 +68,16 @@ export default function AllDocs() {
 
   return (
     <>
+      <h2 className="uppercase font-semibold tracking-wider">
+        {docs.length >= 1 ? "All Documents" : "No documents Found"}
+      </h2>
       <input
         type="text"
         placeholder="Search..."
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
-        className="border border-gray-300 p-2 mb-4 text-black"
+        className="block mb-4 mt-4 w-fit rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:outline-none px-4 focus:ring-blue-400 sm:text-sm sm:leading-6"
       />
-      <h2 className="uppercase font-semibold tracking-wider">
-        {docs.length >= 1 ? "All Documents" : "No documents Found"}
-      </h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {docs.map((i) => (
           <div key={i.id}>
@@ -150,10 +148,19 @@ export default function AllDocs() {
                   {i.user.email}
                 </Link>
               </div>
+              <div className="mb-3 font-semibold ">
+                <Link
+                  href={`/documents/${i.id}`}
+                  className="text-sm text-gray-400 capitalize"
+                >
+                  {i.categories ? i.categories.name : null}
+                </Link>
+              </div>
+
               <div className="w-full mb-3 bg-slate-700 h-0.5 rounded-full" />
               <Link
                 href={`/documents/${i.id}`}
-                className="text-sm   text-gray-400 "
+                className="text-sm text-gray-400 "
                 dangerouslySetInnerHTML={{
                   __html: i.content.slice(0, 120),
                 }}

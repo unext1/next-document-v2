@@ -56,8 +56,8 @@ export async function PATCH(
 
     const { id } = params;
     const body = await req.json();
-    const { title, isPublic, content } = body;
-    await EditDoc({ id, title, isPublic, content });
+    const { title, isPublic, content, unDelete, categoryId } = body;
+    await EditDoc({ id, title, isPublic, content, unDelete, categoryId });
     return NextResponse.json({ message: "Updated !" }, { status: 200 });
   } catch (error) {
     return NextResponse.json({ error: "An error occurred" }, { status: 500 });

@@ -1,5 +1,6 @@
 "use client";
 
+import { Category, DocType } from "@/types";
 import { useSession } from "next-auth/react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
@@ -16,6 +17,8 @@ export interface FormData {
   userId: string;
   title: string;
   isPublic: boolean;
+  isDeleted: boolean;
+  categoryId: number | null;
 }
 
 const EditDocumentPage = () => {
@@ -24,29 +27,47 @@ const EditDocumentPage = () => {
   const documentId = params.id;
   const router = useRouter();
   const [content, setContent] = useState("");
+  const [categories, setCategories] = useState<Category[]>([]);
+
   const [formData, setFormData] = useState<FormData>({
     userId: "",
     title: "",
     isPublic: false,
+    isDeleted: false,
+    categoryId: null,
   });
 
   const [isLoading, setIsLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
 
   useEffect(() => {
-    const getSingleDoc = async () => {
+    const fetchData = async () => {
       try {
-        const result = await fetch(`/api/${documentId}`);
-        if (!result.ok) {
+        const [docResult, categoriesResult] = await Promise.all([
+          fetch(`/api/${documentId}`),
+          fetch("/api/categories"),
+        ]);
+
+        if (!docResult.ok) {
           throw new Error("Failed to fetch document");
         }
-        const document = await result.json();
+
+        const document = await docResult.json();
         setFormData({
           userId: document.user_id,
           title: document.title,
           isPublic: document.is_public || false,
+          isDeleted: document.deleted || false,
+          categoryId: document.category_id || null,
         });
         setContent(document.content);
+
+        if (!categoriesResult.ok) {
+          throw new Error("Failed to fetch categories");
+        }
+
+        const categoryArray: Category[] = await categoriesResult.json();
+        setCategories(categoryArray);
       } catch (error) {
         console.error(error);
       } finally {
@@ -54,7 +75,7 @@ const EditDocumentPage = () => {
       }
     };
 
-    getSingleDoc();
+    fetchData();
   }, [documentId]);
 
   const ReactQuill = useMemo(
@@ -63,21 +84,22 @@ const EditDocumentPage = () => {
   );
 
   const handleInputChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
+    const { name, value, type } = e.target;
 
-  const handleCheckboxChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { name, checked } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: checked,
-    }));
+    if (type === "checkbox") {
+      const checkboxValue = (e.target as HTMLInputElement).checked;
+      setFormData((prev) => ({
+        ...prev,
+        [name]: checkboxValue,
+      }));
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
   };
 
   const handleSubmit = async (e: FormEvent) => {
@@ -88,8 +110,6 @@ const EditDocumentPage = () => {
     setIsEditing(true);
 
     try {
-      console.log(formData.isPublic);
-
       const response = await fetch(`/api/${documentId}`, {
         method: "PATCH",
         body: JSON.stringify({ ...formData, content }),
@@ -107,6 +127,26 @@ const EditDocumentPage = () => {
       console.error(error);
     } finally {
       setIsEditing(false);
+    }
+  };
+
+  const hanldeUnDelete = async () => {
+    try {
+      const response = await fetch(`/api/${documentId}`, {
+        method: "PATCH",
+        body: JSON.stringify({ ...formData, content, unDelete: 0 }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to Undelete the document");
+      }
+
+      router.push("/documents");
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -151,8 +191,17 @@ const EditDocumentPage = () => {
             className="bg-red-500 cursor-pointer rounded-xl px-2 py-1 text-xs my-auto"
             onClick={handleDelete}
           >
-            X
+            Delete Document
           </div>
+
+          {formData.isDeleted ? (
+            <div
+              className="bg-blue-400 cursor-pointer rounded-xl px-2 py-1 text-xs my-auto"
+              onClick={hanldeUnDelete}
+            >
+              Undelete Document
+            </div>
+          ) : null}
         </div>
         <button
           onClick={() => router.back()}
@@ -175,6 +224,28 @@ const EditDocumentPage = () => {
             onChange={handleInputChange}
             required
           />
+        </div>
+        <div className="mt-4">
+          <label
+            htmlFor="categoryId"
+            className="block text-xs mb-1 mt-6 uppercase font-semibold leading-6 text-gray-400"
+          >
+            Category
+          </label>
+          <select
+            id="categoryId"
+            name="categoryId"
+            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:outline-none px-4 focus:ring-blue-400 sm:text-sm sm:leading-6"
+            value={formData.categoryId || ""}
+            onChange={handleInputChange}
+          >
+            <option value="">Select a category</option>
+            {categories.map((category) => (
+              <option key={category.id} value={category.id}>
+                {category.name}
+              </option>
+            ))}
+          </select>
         </div>
 
         <div className="mt-4 uppercase text-xs text-gray-400">Content:</div>
@@ -211,7 +282,7 @@ const EditDocumentPage = () => {
               className="mr-2"
               name="isPublic"
               checked={formData.isPublic}
-              onChange={handleCheckboxChange}
+              onChange={handleInputChange}
             />
             Make Document Public
           </label>

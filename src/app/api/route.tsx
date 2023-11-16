@@ -21,7 +21,7 @@ export async function GET(req: Request, res: Response) {
 export async function POST(req: Request, res: Response) {
   try {
     const body = await req.json();
-    const { title, isPublic, userId, content } = body;
+    const { title, categoryId, isPublic, userId, content } = body;
     const session = await getServerSession(authOptions);
     if (!session || !session.user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -31,6 +31,7 @@ export async function POST(req: Request, res: Response) {
       userId,
       content,
       isPublic,
+      categoryId,
     });
     return NextResponse.json(documents, { status: 200 });
   } catch (error) {

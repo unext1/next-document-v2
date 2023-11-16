@@ -27,4 +27,13 @@ type DocType = {
     email: string;
     role: string;
   };
+  categories: {
+    id: number;
+    name: string;
+  };
+};
+
+type Category = {
+  id: number;
+  name: string;
 };

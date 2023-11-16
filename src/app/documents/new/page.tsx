@@ -1,12 +1,20 @@
 "use client";
-import React, { useState, ChangeEvent, FormEvent, useMemo } from "react";
+import React, {
+  useState,
+  ChangeEvent,
+  FormEvent,
+  useMemo,
+  useEffect,
+} from "react";
 import dynamic from "next/dynamic";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { Category } from "@/types";
 
 export interface FormData {
   title: string;
   isPublic: boolean;
+  categoryId: number | null;
 }
 
 export default function NewDocumentPage() {
@@ -18,29 +26,49 @@ export default function NewDocumentPage() {
   const [formData, setFormData] = useState<FormData>({
     title: "",
     isPublic: false,
+    categoryId: null,
   });
   const [error, setError] = useState("");
+  const [categories, setCategories] = useState<Category[]>([]);
   const ReactQuill = useMemo(
     () => dynamic(() => import("react-quill"), { ssr: false }),
     []
   );
 
-  const handleInputChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch("/api/categories");
+        if (!response.ok) {
+          throw new Error("Failed to fetch categories");
+        }
+        const categoryArray: Category[] = await response.json();
+        setCategories(categoryArray);
+      } catch (error) {
+        console.error(error);
+      }
+    };
 
-  const handleCheckboxChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { name, checked } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: checked,
-    }));
+    fetchCategories();
+  }, []);
+
+  const handleInputChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value, type } = e.target;
+
+    if (type === "checkbox") {
+      const checkboxValue = (e.target as HTMLInputElement).checked;
+      setFormData((prev) => ({
+        ...prev,
+        [name]: checkboxValue,
+      }));
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
   };
 
   const handleSubmit = async (e: FormEvent) => {
@@ -67,6 +95,7 @@ export default function NewDocumentPage() {
       setFormData({
         title: "",
         isPublic: false,
+        categoryId: null,
       });
       setContent("");
       setError("");
@@ -106,7 +135,28 @@ export default function NewDocumentPage() {
             aria-label="Title"
           />
         </div>
-
+        <div className="mt-4">
+          <label
+            htmlFor="categoryId"
+            className="block text-xs mb-1 mt-6 uppercase font-semibold leading-6 text-gray-400"
+          >
+            Category
+          </label>
+          <select
+            id="categoryId"
+            name="categoryId"
+            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:outline-none px-4 focus:ring-blue-400 sm:text-sm sm:leading-6"
+            value={formData.categoryId || ""}
+            onChange={handleInputChange}
+          >
+            <option value="">Select a category</option>
+            {categories.map((category) => (
+              <option key={category.id} value={category.id}>
+                {category.name}
+              </option>
+            ))}
+          </select>
+        </div>
         <label
           htmlFor="content"
           className="block text-xs mb-1 mt-6 uppercase font-semibold leading-6 text-gray-400"
@@ -146,7 +196,7 @@ export default function NewDocumentPage() {
               className="mr-2"
               name="isPublic"
               checked={formData.isPublic}
-              onChange={handleCheckboxChange}
+              onChange={handleInputChange}
             />
             Make Document Public
           </label>

@@ -25,17 +25,18 @@ export default async function GetAllDocs() {
           created_at: true,
         },
       },
+      categories: true,
     },
-    where: and(
-      or(
-        and(
-          eq(documents.user_id, Number(session?.user.id)),
-          eq(documents.deleted, 0) // Allow access for the document owner if not deleted
-        ),
-        and(
-          eq(documents.is_public, 1),
-          eq(documents.deleted, 0) // Allow access for public documents if not deleted
-        )
+    where: or(
+      and(
+        eq(documents.user_id, Number(session?.user.id)),
+        or(eq(documents.deleted, 0), eq(documents.deleted, 1))
+      ),
+      and(eq(documents.is_public, 1), eq(documents.deleted, 0)),
+      and(
+        eq(documents.is_public, 1),
+        eq(documents.deleted, 1),
+        eq(documents.user_id, Number(session?.user.id))
       )
     ),
   });
