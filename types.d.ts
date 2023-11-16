@@ -18,9 +18,9 @@ type DocType = {
   content: string;
   user_id: number;
   created_at: Date;
+  updated_at: Date;
   is_public: number;
   deleted: boolean | number;
-  updated_at: Date;
   user: {
     id: number;
     username: string;

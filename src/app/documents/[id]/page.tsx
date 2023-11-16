@@ -92,7 +92,13 @@ const DocumentPage = () => {
           <p className="capitalize">
             {singleDoc.categories ? singleDoc.categories.name : null}
           </p>
-          <div className="mt-4 uppercase text-xs text-gray-400">Content:</div>
+          <div className="mt-4 uppercase text-xs text-gray-400 ">
+            Updated At:
+          </div>
+          {new Date(singleDoc.updated_at).toLocaleDateString() +
+            " " +
+            new Date(singleDoc.updated_at).toLocaleTimeString()}
+          <div className="mt-4 uppercase text-xs text-gray-400">Content</div>
           <div
             className="text-sm mt-1 prose-sm"
             dangerouslySetInnerHTML={{ __html: singleDoc.content }}
