@@ -26,18 +26,23 @@ export default function Navbar() {
               >
                 Home
               </Link>
-              <Link
-                href="/documents"
-                className="inline-flex items-center px-1 pt-1 text-sm"
-              >
-                Documents
-              </Link>
-              <Link
-                href="/documents/new"
-                className="inline-flex items-center px-1 pt-1 text-sm"
-              >
-                Add Document
-              </Link>
+              {session && (
+                <Link
+                  href="/documents"
+                  className="inline-flex items-center px-1 pt-1 text-sm"
+                >
+                  Documents
+                </Link>
+              )}
+              {session && (
+                <Link
+                  href="/documents/new"
+                  className="inline-flex items-center px-1 pt-1 text-sm"
+                >
+                  Add Document
+                </Link>
+              )}
+
               {!session ? (
                 <Link
                   href="/login"
@@ -74,16 +79,20 @@ export default function Navbar() {
                   Home
                 </Disclosure.Button>
               </Link>
-              <Link href="/documents" className="w-full">
-                <Disclosure.Button className="block w-full py-1 pl-3 pr-4 text-base text-left font-medium ">
-                  Documents
-                </Disclosure.Button>
-              </Link>
-              <Link href="/documents/new" className="w-full">
-                <Disclosure.Button className="block w-full py-1 pl-3 pr-4 text-base text-left font-medium ">
-                  Add Document
-                </Disclosure.Button>
-              </Link>
+              {session && (
+                <Link href="/documents" className="w-full">
+                  <Disclosure.Button className="block w-full py-1 pl-3 pr-4 text-base text-left font-medium ">
+                    Documents
+                  </Disclosure.Button>
+                </Link>
+              )}
+              {session && (
+                <Link href="/documents/new" className="w-full">
+                  <Disclosure.Button className="block w-full py-1 pl-3 pr-4 text-base text-left font-medium ">
+                    Add Document
+                  </Disclosure.Button>
+                </Link>
+              )}
               {!session ? (
                 <Link href="/login" className="w-full">
                   <Disclosure.Button className="block w-full py-1 pl-3 pr-4 text-base text-left font-medium ">

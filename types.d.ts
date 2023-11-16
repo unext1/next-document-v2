@@ -21,4 +21,10 @@ type DocType = {
   is_public: number;
   deleted: number;
   updated_at: Date;
+  user: {
+    id: number;
+    username: string;
+    email: string;
+    role: string;
+  };
 };

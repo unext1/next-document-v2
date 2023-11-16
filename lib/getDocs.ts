@@ -16,7 +16,15 @@ export default async function GetAllDocs() {
 
   const docs = await db.query.documents.findMany({
     with: {
-      user: true,
+      user: {
+        columns: {
+          id: true,
+          email: true,
+          username: true,
+          role: true,
+          created_at: true,
+        },
+      },
     },
     where: or(
       eq(documents.user_id, Number(session?.user.id)),

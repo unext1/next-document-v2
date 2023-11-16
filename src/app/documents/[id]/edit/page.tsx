@@ -1,4 +1,5 @@
 "use client";
+import { useSession } from "next-auth/react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
@@ -11,17 +12,18 @@ import React, {
 } from "react";
 
 export interface FormData {
-  author: string;
+  userId: string;
   title: string;
 }
 
 const EditDocumentPage = () => {
+  const { data: session } = useSession();
   const params = useParams();
   const documentId = params.id;
   const router = useRouter();
   const [content, setContent] = useState("");
   const [formData, setFormData] = useState<FormData>({
-    author: "",
+    userId: "",
     title: "",
   });
 
@@ -37,7 +39,7 @@ const EditDocumentPage = () => {
         }
         const document = await result.json();
         setFormData({
-          author: document.author,
+          userId: document.user_id,
           title: document.title,
         });
         setContent(document.content);
@@ -116,6 +118,9 @@ const EditDocumentPage = () => {
     return <p>Loading Data...</p>;
   }
 
+  if (String(session?.user.id) != formData.userId) {
+    return <p>You are not authorized to Edit this document</p>;
+  }
   return (
     <div>
       <div className="flex justify-between w-full  mb-4">
@@ -158,18 +163,7 @@ const EditDocumentPage = () => {
             required
           />
         </div>
-        <div className="mt-4 uppercase text-xs text-gray-400">Author:</div>
-        <div className="mt-2">
-          <input
-            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:outline-none px-4 focus:ring-blue-400 sm:text-sm sm:leading-6"
-            type="text"
-            id="author"
-            name="author"
-            value={formData.author}
-            onChange={handleInputChange}
-            required
-          />
-        </div>
+
         <div className="mt-4 uppercase text-xs text-gray-400">Content:</div>
         <div>
           <ReactQuill

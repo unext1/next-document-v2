@@ -1,5 +1,7 @@
 "use client";
 
+import { DocType } from "@/types";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -7,6 +9,7 @@ import { useEffect, useState } from "react";
 const DocumentPage = () => {
   const params = useParams();
   const documentId = params.id;
+  const { data: session } = useSession();
 
   const [singleDoc, setSingleDoc] = useState<DocType | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -43,12 +46,14 @@ const DocumentPage = () => {
           </Link>
           / Document {documentId}
         </h1>
-        <Link
-          href={`/documents/${documentId}/edit`}
-          className="bg-blue-400 my-auto px-4 py-1 rounded-xl uppercase font-semibold text-xs text-white"
-        >
-          Edit
-        </Link>
+        {session?.user.id == singleDoc?.user_id ? (
+          <Link
+            href={`/documents/${documentId}/edit`}
+            className="bg-blue-400 my-auto px-4 py-1 rounded-xl uppercase font-semibold text-xs text-white"
+          >
+            Edit
+          </Link>
+        ) : null}
       </div>
       {singleDoc && (
         <div className="bg-slate-900 rounded-xl p-4">

@@ -3,7 +3,9 @@ import { connect } from "@planetscale/database";
 import { config } from "../db/config";
 import { drizzle } from "drizzle-orm/planetscale-serverless";
 import { documents } from "../db/schema";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/src/app/api/auth/[...nextauth]/route";
 
 export default async function EditDoc({
   id,
@@ -18,6 +20,7 @@ export default async function EditDoc({
 }) {
   const con = connect(config);
   const db = drizzle(con);
+  const session = await getServerSession(authOptions);
 
   const edit = await db
     .update(documents)
@@ -26,7 +29,9 @@ export default async function EditDoc({
       content: content,
       user_id: 0,
     })
-    .where(eq(documents.id, id));
+    .where(
+      and(eq(documents.id, id), eq(documents.id, Number(session?.user.id)))
+    );
 
   return edit;
 }
