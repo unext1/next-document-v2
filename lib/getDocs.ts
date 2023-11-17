@@ -28,16 +28,8 @@ export default async function GetAllDocs() {
       categories: true,
     },
     where: or(
-      and(
-        eq(documents.user_id, Number(session?.user.id)),
-        or(eq(documents.deleted, 0), eq(documents.deleted, 1))
-      ),
-      and(eq(documents.is_public, 1), eq(documents.deleted, 0)),
-      and(
-        eq(documents.is_public, 1),
-        eq(documents.deleted, 1),
-        eq(documents.user_id, Number(session?.user.id))
-      )
+      eq(documents.user_id, Number(session?.user.id)),
+      and(eq(documents.is_public, 1), eq(documents.deleted, 0))
     ),
   });
 

@@ -200,6 +200,23 @@ const EditDocumentPage = () => {
         </button>
       </div>
 
+      <div className="flex space-x-4 mb-4">
+        <button
+          className="relative py-1 px-6 w-fit bg-red-400 text-sm uppercase font-semibold rounded-xl"
+          onClick={handleDelete}
+        >
+          Delete Document
+        </button>
+
+        {formData.isDeleted ? (
+          <button
+            className="relative py-1 px-6 w-fit bg-yellow-400 text-sm uppercase font-semibold rounded-xl"
+            onClick={hanldeUnDelete}
+          >
+            Undelete Document
+          </button>
+        ) : null}
+      </div>
       <form className="bg-slate-900 rounded-xl p-4">
         <h1 className="font-bold mb-4">Id: {documentId}</h1>
         <div className="mt-4 uppercase text-xs text-gray-400">Title:</div>
@@ -286,21 +303,6 @@ const EditDocumentPage = () => {
           >
             {isEditing ? "Editing..." : "Edit Document"}
           </button>
-          <button
-            className="relative mt-2 md:mt-8 py-2 px-6 w-fit bg-red-400 text-sm uppercase font-semibold rounded-xl"
-            onClick={handleDelete}
-          >
-            Delete Document
-          </button>
-
-          {formData.isDeleted ? (
-            <button
-              className="relative mt-2 md:mt-8 py-2 px-6 w-fit bg-yellow-400 text-sm uppercase font-semibold rounded-xl"
-              onClick={hanldeUnDelete}
-            >
-              Undelete Document
-            </button>
-          ) : null}
         </div>
       </form>
     </div>
