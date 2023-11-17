@@ -87,7 +87,10 @@ const DocumentPage = () => {
           <p> {singleDoc.title}</p>
 
           <div className="mt-4 uppercase text-xs text-gray-400">Author:</div>
-          <p>{singleDoc.user.email}</p>
+          <div className="flex space-x-1">
+            <p className="capitalize">{singleDoc.user.username} /</p>
+            <p>{singleDoc.user.email}</p>
+          </div>
           <div className="mt-4 uppercase text-xs text-gray-400 ">Category:</div>
           <p className="capitalize">
             {singleDoc.categories ? singleDoc.categories.name : null}

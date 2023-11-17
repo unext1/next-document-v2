@@ -86,7 +86,7 @@ export default function AllDocumentsPage() {
       <h2 className="uppercase font-semibold tracking-wider">
         {docs.length >= 1 ? "All Documents" : "No documents Found"}
       </h2>
-      <div className="flex space-x-4">
+      <div className="md:flex md:space-x-4">
         <input
           type="text"
           placeholder="Search..."
@@ -101,7 +101,11 @@ export default function AllDocumentsPage() {
         >
           <option value="">All Categories</option>
           {categories.map((category) => (
-            <option key={category.id} value={category.id}>
+            <option
+              key={category.id}
+              value={category.id}
+              className="text-gray-600"
+            >
               {category.name}
             </option>
           ))}
@@ -186,7 +190,7 @@ export default function AllDocumentsPage() {
                   href={`/documents/${i.id}`}
                   className="text-sm text-gray-400 "
                 >
-                  {i.user.email}
+                  {i.user.username}
                 </Link>
               </div>
 
