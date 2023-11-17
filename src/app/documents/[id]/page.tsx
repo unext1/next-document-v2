@@ -13,6 +13,7 @@ const DocumentPage = () => {
 
   const [singleDoc, setSingleDoc] = useState<DocType | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState();
 
   useEffect(() => {
     const getSingleDoc = async () => {
@@ -23,8 +24,8 @@ const DocumentPage = () => {
         }
         const document = await result.json();
         setSingleDoc(document);
-      } catch (error) {
-        console.error(error);
+      } catch (error: any) {
+        setError(error);
       } finally {
         setIsLoading(false);
       }
@@ -32,6 +33,10 @@ const DocumentPage = () => {
 
     getSingleDoc();
   }, [documentId]);
+
+  if (error) {
+    return <p className="font-semibold">You are allowed to visit this page.</p>;
+  }
 
   if (isLoading) {
     return <p>Loading Data...</p>;

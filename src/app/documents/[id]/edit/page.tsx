@@ -171,7 +171,11 @@ const EditDocumentPage = () => {
   }
 
   if (String(session?.user.id) !== String(formData.userId)) {
-    return <p>You are not authorized to Edit this document</p>;
+    return (
+      <p className="font-semibold">
+        You are not authorized to Edit this document
+      </p>
+    );
   }
 
   return (
@@ -187,21 +191,6 @@ const EditDocumentPage = () => {
             </Link>{" "}
             Edit Document
           </h1>
-          <div
-            className="bg-red-500 cursor-pointer rounded-xl px-2 py-1 text-xs my-auto"
-            onClick={handleDelete}
-          >
-            Delete Document
-          </div>
-
-          {formData.isDeleted ? (
-            <div
-              className="bg-blue-400 cursor-pointer rounded-xl px-2 py-1 text-xs my-auto"
-              onClick={hanldeUnDelete}
-            >
-              Undelete Document
-            </div>
-          ) : null}
         </div>
         <button
           onClick={() => router.back()}
@@ -284,18 +273,35 @@ const EditDocumentPage = () => {
               checked={formData.isPublic}
               onChange={handleInputChange}
             />
-            Make Document Public
+            Public Document
           </label>
         </div>
 
-        <button
-          type="submit"
-          className="relative mt-8 py-2 px-6 w-fit bg-blue-400 text-sm uppercase font-semibold rounded-xl"
-          onClick={handleSubmit}
-          disabled={isEditing}
-        >
-          {isEditing ? "Editing..." : "Edit Document"}
-        </button>
+        <div className="md:flex md:space-x-4">
+          <button
+            type="submit"
+            className="relative mt-8 py-2 px-6 w-fit bg-blue-400 text-sm uppercase font-semibold rounded-xl"
+            onClick={handleSubmit}
+            disabled={isEditing}
+          >
+            {isEditing ? "Editing..." : "Edit Document"}
+          </button>
+          <button
+            className="relative mt-2 md:mt-8 py-2 px-6 w-fit bg-red-400 text-sm uppercase font-semibold rounded-xl"
+            onClick={handleDelete}
+          >
+            Delete Document
+          </button>
+
+          {formData.isDeleted ? (
+            <button
+              className="relative mt-2 md:mt-8 py-2 px-6 w-fit bg-yellow-400 text-sm uppercase font-semibold rounded-xl"
+              onClick={hanldeUnDelete}
+            >
+              Undelete Document
+            </button>
+          ) : null}
+        </div>
       </form>
     </div>
   );

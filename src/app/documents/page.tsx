@@ -80,6 +80,9 @@ export default function AllDocumentsPage() {
   if (isLoading) {
     return <div>Loading Data...</div>;
   }
+  if (!session || !session.user) {
+    return <div className="font-semibold">Please login to view this page</div>;
+  }
 
   return (
     <>

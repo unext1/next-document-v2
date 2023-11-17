@@ -105,6 +105,7 @@ export default function NewDocumentPage() {
       console.error("Error adding the document");
     }
   };
+
   if (!session?.user) {
     return <p>You are not authorized to create documents</p>;
   }
@@ -198,7 +199,7 @@ export default function NewDocumentPage() {
               checked={formData.isPublic}
               onChange={handleInputChange}
             />
-            Make Document Public
+            Public Dokument
           </label>
         </div>
 

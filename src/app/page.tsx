@@ -5,7 +5,6 @@ import React, { useState, ChangeEvent, FormEvent } from "react";
 
 export default async function Home() {
   const session = await getServerSession();
-  console.log(session);
   return (
     <>
       <div className="mx-auto flex flex-col items-center py-32 ">
@@ -31,8 +30,8 @@ export default async function Home() {
           This is where we <span className="text-blue-400">shine.</span>
         </h3>
 
-        <div className=" pb-20 grid grid-cols-5 gap-4">
-          <div className="bg-blue-400 rounded-xl col-span-3 row-span-2 p-6">
+        <div className=" pb-20 grid md:grid-cols-5 gap-4">
+          <div className="bg-blue-400 rounded-xl col-span-2 md:col-span-3 row-span-1 md:row-span-2 p-6">
             <h3 className="text-white font-semibold uppercase text-lg md:text-2xl ">
               CREATE
             </h3>
