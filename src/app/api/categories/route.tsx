@@ -1,8 +1,6 @@
-import { NextResponse } from "next/server";
-import GetAllDocs from "@/lib/getDocs";
-import PostDocs from "@/lib/postDocs";
-import { getServerSession } from "next-auth";
 import GetAllCategories from "@/lib/getCategories";
+import { getServerSession } from "next-auth";
+import { NextResponse } from "next/server";
 import { authOptions } from "../auth/[...nextauth]/route";
 
 export async function GET(req: Request, res: Response) {

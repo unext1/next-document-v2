@@ -1,11 +1,11 @@
 import { connect } from "@planetscale/database";
 
-import { config } from "../db/config";
-import { drizzle } from "drizzle-orm/planetscale-serverless";
-import { documents } from "../db/schema";
-import { or, eq } from "drizzle-orm";
-import { getServerSession } from "next-auth";
 import { authOptions } from "@/src/app/api/auth/[...nextauth]/route";
+import { eq, or } from "drizzle-orm";
+import { drizzle } from "drizzle-orm/planetscale-serverless";
+import { getServerSession } from "next-auth";
+import { config } from "../db/config";
+import { documents } from "../db/schema";
 
 export default async function EditDoc({
   id,

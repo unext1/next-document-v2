@@ -6,7 +6,7 @@ import * as schema from "../db/schema";
 import { documents } from "../db/schema";
 
 import { authOptions } from "@/src/app/api/auth/[...nextauth]/route";
-import { eq, or, and } from "drizzle-orm";
+import { and, eq, or } from "drizzle-orm";
 import { getServerSession } from "next-auth";
 
 export default async function GetAllDocs() {

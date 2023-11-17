@@ -6,8 +6,8 @@ import { config } from "@/db/config";
 import { users } from "@/db/schema";
 import { drizzle } from "drizzle-orm/planetscale-serverless";
 
-import { eq } from "drizzle-orm";
 import bcrypt from "bcrypt";
+import { eq } from "drizzle-orm";
 
 export const authOptions: NextAuthOptions = {
   session: {

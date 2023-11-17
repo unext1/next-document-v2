@@ -1,7 +1,7 @@
 "use client";
 import { useSession } from "next-auth/react";
 import { redirect, useRouter } from "next/navigation";
-import React, { useState, ChangeEvent, FormEvent, useEffect } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 
 export interface FormData {
   username: string;
@@ -17,7 +17,6 @@ export default function CreateUserPage() {
     password: "",
   });
   const [error, setError] = useState("");
-  const router = useRouter();
 
   useEffect(() => {
     if (!session || session.user.role !== "admin") {

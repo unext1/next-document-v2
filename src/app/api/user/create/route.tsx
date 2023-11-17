@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 
 import CreateUser from "@/lib/createUser";
 import { hash } from "bcrypt";
-import { getSession } from "next-auth/react";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../auth/[...nextauth]/route";
 

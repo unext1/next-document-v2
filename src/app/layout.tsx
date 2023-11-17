@@ -1,11 +1,11 @@
+import Navbar from "@/src/app/components/navbar";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/src/app/components/navbar";
 
 import "react-quill/dist/quill.snow.css";
-import Footer from "./components/footer";
 import AuthProvider from "./components/auth/authprovider";
+import Footer from "./components/footer";
 
 const inter = Inter({ subsets: ["latin"] });
 

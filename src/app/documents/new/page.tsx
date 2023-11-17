@@ -1,15 +1,9 @@
 "use client";
-import React, {
-  useState,
-  ChangeEvent,
-  FormEvent,
-  useMemo,
-  useEffect,
-} from "react";
-import dynamic from "next/dynamic";
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import { Category } from "@/types";
+import { useSession } from "next-auth/react";
+import dynamic from "next/dynamic";
+import { useRouter } from "next/navigation";
+import { ChangeEvent, FormEvent, useEffect, useMemo, useState } from "react";
 
 export interface FormData {
   title: string;
@@ -21,6 +15,7 @@ export default function NewDocumentPage() {
   const { data: session } = useSession();
 
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(true);
 
   const [content, setContent] = useState("");
   const [formData, setFormData] = useState<FormData>({
@@ -50,6 +45,7 @@ export default function NewDocumentPage() {
     };
 
     fetchCategories();
+    setIsLoading(false);
   }, []);
 
   const handleInputChange = (
@@ -105,6 +101,10 @@ export default function NewDocumentPage() {
       console.error("Error adding the document");
     }
   };
+
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
 
   if (!session?.user) {
     return <p>You are not authorized to create documents</p>;

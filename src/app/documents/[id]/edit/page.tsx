@@ -1,17 +1,11 @@
 "use client";
 
-import { Category, DocType } from "@/types";
+import { Category } from "@/types";
 import { useSession } from "next-auth/react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
-import React, {
-  useState,
-  ChangeEvent,
-  FormEvent,
-  useMemo,
-  useEffect,
-} from "react";
+import { ChangeEvent, FormEvent, useEffect, useMemo, useState } from "react";
 
 export interface FormData {
   userId: string;
