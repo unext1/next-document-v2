@@ -34,6 +34,7 @@ export default async function PostDocs({
     is_public: isPublic ? 1 : 0,
     deleted: 0,
     category_id: categoryId,
+    updated_at: formattedDate || "",
   });
 
   return docs;

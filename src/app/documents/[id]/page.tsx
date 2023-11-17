@@ -96,6 +96,12 @@ const DocumentPage = () => {
             {singleDoc.categories ? singleDoc.categories.name : null}
           </p>
           <div className="mt-4 uppercase text-xs text-gray-400 ">
+            Created At:
+          </div>
+          {new Date(singleDoc.created_at).toLocaleDateString() +
+            " " +
+            new Date(singleDoc.created_at).toLocaleTimeString()}
+          <div className="mt-4 uppercase text-xs text-gray-400 ">
             Updated At:
           </div>
           {new Date(singleDoc.updated_at).toLocaleDateString() +
