@@ -7,6 +7,7 @@ import { users } from "@/db/schema";
 import { drizzle } from "drizzle-orm/planetscale-serverless";
 
 import { eq } from "drizzle-orm";
+import bcrypt from "bcrypt";
 
 export const authOptions: NextAuthOptions = {
   session: {
@@ -35,13 +36,19 @@ export const authOptions: NextAuthOptions = {
             .where(eq(users.email, credentials.email))
             .then((res) => res[0]);
 
-          const jwtUser = {
-            id: dbUser.id.toString(),
-            name: dbUser.username,
-            email: dbUser.email,
-            role: dbUser.role,
-          };
-          return jwtUser;
+          const validPassword = await bcrypt.compare(
+            credentials.password,
+            dbUser.password
+          );
+          if (validPassword) {
+            const jwtUser = {
+              id: dbUser.id.toString(),
+              name: dbUser.username,
+              email: dbUser.email,
+              role: dbUser.role,
+            };
+            return jwtUser;
+          } else return null;
         }
         return null;
       },
