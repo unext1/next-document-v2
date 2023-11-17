@@ -1,4 +1,4 @@
-# Next.js Planetscale Drizzle ORM Document Management
+# Next.js Planetscale Drizzle ORM Document Management (Group Work)
 
 This is a simple document management system built with Next.js, Planetscale, the Drizzle ORM and TailwindCSS. This Projects allows you to have control over documents and they are editable with WYSIWYG editor, which allows more indebt editing.
 
@@ -10,6 +10,8 @@ Before you begin, make sure you have the following environment variables set in 
 - `DATABASE_USERNAME`: Your Planetscale database username.
 - `DATABASE_PASSWORD`: Your Planetscale database password.
 - `DATABASE_URL`: Your Planetscale database URL.
+- `NEXTAUTH_URL`: Your Next Auth Url.
+- `NEXTAUTH_SECRET`: Secret key for NextAuth
 
 Make sure to replace the values with your actual Planetscale database information.
 
@@ -52,3 +54,6 @@ This project provides basic document management functionality (CRUD). You can cr
 - Create new document
 - Edit existing document
 - Delete document
+- Filtering Documents
+- Login system
+- Admin functionality (adding user)
