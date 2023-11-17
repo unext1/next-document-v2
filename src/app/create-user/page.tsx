@@ -23,7 +23,7 @@ export default function CreateUserPage() {
     if (!session || session.user.role !== "admin") {
       return redirect("/");
     }
-  }, []);
+  }, [session]);
 
   const handleInputChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
