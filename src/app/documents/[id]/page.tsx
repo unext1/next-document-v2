@@ -100,7 +100,7 @@ const DocumentPage = () => {
             new Date(singleDoc.updated_at).toLocaleTimeString()}
           <div className="mt-4 uppercase text-xs text-gray-400">Content</div>
           <div
-            className="text-sm mt-1 prose-sm"
+            className="mt-1 "
             dangerouslySetInnerHTML={{ __html: singleDoc.content }}
           />
         </div>

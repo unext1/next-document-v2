@@ -1,28 +1,37 @@
 "use client";
-import { DocType } from "@/types";
+import { Category, DocType } from "@/types";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-export default function AllDocs() {
+export default function AllDocumentsPage() {
   const [docs, setDocs] = useState<DocType[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
 
   const { data: session } = useSession();
 
   useEffect(() => {
-    const getAllDocuments = async () => {
+    const fetchData = async () => {
       try {
-        const res = await fetch("/api");
-        if (!res.ok) {
-          throw new Error("Failed to fetch data");
-        }
-        const allDocs = await res.json();
+        const [docResult, categoriesResult] = await Promise.all([
+          fetch("/api"),
+          fetch("/api/categories"),
+        ]);
 
-        const sortedDocs = allDocs
+        if (!docResult.ok) {
+          throw new Error("Failed to fetch document");
+        }
+        const allDocs = await docResult.json();
+
+        const filteredDocs = allDocs
           .filter((doc: DocType) =>
             doc.title.toLowerCase().includes(searchTerm.toLowerCase())
+          )
+          .filter((doc: DocType) =>
+            selectedCategory ? doc.categories.id === selectedCategory : true
           )
           .sort((a: any, b: any) =>
             (b.updated_at || b.created_at).localeCompare(
@@ -30,17 +39,23 @@ export default function AllDocs() {
             )
           );
 
-        setDocs(sortedDocs);
+        setDocs(filteredDocs);
 
-        // setDocs(allDocs);
-        setIsLoading(false);
+        if (!categoriesResult.ok) {
+          throw new Error("Failed to fetch categories");
+        }
+
+        const categoryArray: Category[] = await categoriesResult.json();
+        setCategories(categoryArray);
       } catch (error) {
         console.error(error);
+      } finally {
         setIsLoading(false);
       }
     };
-    getAllDocuments();
-  }, [searchTerm]);
+
+    fetchData();
+  }, [searchTerm, selectedCategory]);
 
   const handleDelete = async ({ id }: { id: number }) => {
     const response = await fetch(`/api/${id}`, {
@@ -71,13 +86,27 @@ export default function AllDocs() {
       <h2 className="uppercase font-semibold tracking-wider">
         {docs.length >= 1 ? "All Documents" : "No documents Found"}
       </h2>
-      <input
-        type="text"
-        placeholder="Search..."
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        className="block mb-4 mt-4 w-fit rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:outline-none px-4 focus:ring-blue-400 sm:text-sm sm:leading-6"
-      />
+      <div className="flex space-x-4">
+        <input
+          type="text"
+          placeholder="Search..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="block mb-4 mt-4 w-fit rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:outline-none px-4 focus:ring-blue-400 sm:text-sm sm:leading-6"
+        />
+        <select
+          value={selectedCategory || ""}
+          onChange={(e) => setSelectedCategory(Number(e.target.value) || null)}
+          className=" bg-white block mb-4 mt-4 w-fit rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:outline-none px-4 focus:ring-blue-400 sm:text-sm sm:leading-6"
+        >
+          <option value="">All Categories</option>
+          {categories.map((category) => (
+            <option key={category.id} value={category.id}>
+              {category.name}
+            </option>
+          ))}
+        </select>
+      </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {docs.map((i) => (
           <div key={i.id}>
@@ -106,6 +135,18 @@ export default function AllDocs() {
                     Private
                   </span>
                 )}
+                {i.categories ? (
+                  <span className="inline-flex items-center gap-x-1.5 rounded-md px-2 py-1 text-xs font-medium text-white ring-1 ring-inset ring-gray-200 capitalize">
+                    <svg
+                      className="h-1.5 w-1.5 fill-blue-400"
+                      viewBox="0 0 6 6"
+                      aria-hidden="true"
+                    >
+                      <circle cx={3} cy={3} r={3} />
+                    </svg>
+                    {i.categories ? i.categories.name : null}
+                  </span>
+                ) : null}
                 {i.deleted ? (
                   <span className="inline-flex items-center gap-x-1.5 rounded-md px-2 py-1 text-xs font-medium text-white ring-1 ring-inset ring-gray-200">
                     <svg
@@ -146,14 +187,6 @@ export default function AllDocs() {
                   className="text-sm text-gray-400 "
                 >
                   {i.user.email}
-                </Link>
-              </div>
-              <div className="mb-3 font-semibold ">
-                <Link
-                  href={`/documents/${i.id}`}
-                  className="text-sm text-gray-400 capitalize"
-                >
-                  {i.categories ? i.categories.name : null}
                 </Link>
               </div>
 

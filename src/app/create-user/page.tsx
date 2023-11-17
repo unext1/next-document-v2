@@ -1,5 +1,7 @@
 "use client";
-import React, { useState, ChangeEvent, FormEvent } from "react";
+import { useSession } from "next-auth/react";
+import { redirect, useRouter } from "next/navigation";
+import React, { useState, ChangeEvent, FormEvent, useEffect } from "react";
 
 export interface FormData {
   username: string;
@@ -7,13 +9,21 @@ export interface FormData {
   password: string;
 }
 
-export default function NewDocumentPage() {
+export default function CreateUserPage() {
+  const { data: session } = useSession();
   const [formData, setFormData] = useState<FormData>({
     username: "",
     email: "",
     password: "",
   });
   const [error, setError] = useState("");
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!session || session.user.role !== "admin") {
+      return redirect("/");
+    }
+  }, []);
 
   const handleInputChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -55,10 +65,13 @@ export default function NewDocumentPage() {
     }
   };
 
+  if (!session || session.user.role !== "admin") {
+    return;
+  }
   return (
     <div>
       <h1 className="uppercase font-semibold tracking-wider">
-        Create Document
+        Create New User
       </h1>
 
       <div>{error && <p className="text-red-500">{error}</p>}</div>
@@ -123,7 +136,7 @@ export default function NewDocumentPage() {
           className="relative mt-8 py-2 px-6 w-fit bg-blue-400 text-sm uppercase font-semibold rounded-xl"
           onClick={handleSubmit}
         >
-          Add New Document
+          Add A User
         </button>
       </form>
     </div>

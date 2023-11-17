@@ -18,11 +18,12 @@ export default async function Home() {
         <p className="mt-4 text-gray-400 text-sm">
           Create, edit, and manage your documents with ease.
         </p>
+
         <Link
-          href="/documents"
+          href="/login"
           className="relative mt-8 py-2 px-6 w-fit bg-slate-900 rounded-xl "
         >
-          <span className="text-gray-300 text-sm ">View All Documents</span>
+          <span className="text-gray-300 text-sm ">Get Started</span>
         </Link>
       </div>
       <div className="max-w-4xl mx-auto ">
