@@ -22,13 +22,13 @@ To get started with this project, follow these steps:
 1. Clone the repository to your local machine:
 
 ```bash
-git clone https://github.com/unext1/next-document.git
+git clone https://github.com/unext1/next-document-v2
 ```
 
 2. Change into the project directory:
 
 ```bash
-cd next-document
+cd next-document-v2
 ```
 
 3. Install the project dependencies:
